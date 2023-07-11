@@ -18,21 +18,18 @@ def read_questions(position: int):
 
 
 def read_alternatives(question_id: int):
-    alternatives_question = []
     with open('data/alternatives.json') as stream:
         alternatives = json.load(stream)
 
-    for alternative in alternatives:
-        if alternative['question_id'] == question_id:
-            alternatives_question.append(alternative)
-
-    return alternatives_question
+    return [
+        alternative
+        for alternative in alternatives
+        if alternative['question_id'] == question_id
+    ]
 
 
 def create_answer(payload):
     answers = []
-    result = []
-
     with open('data/alternatives.json') as stream:
         alternatives = json.load(stream)
 
@@ -45,11 +42,13 @@ def create_answer(payload):
     with open('data/cars.json') as stream:
         cars = json.load(stream)
 
-    for car in cars:
-        if answers[0] in car.values() and answers[1] in car.values() and answers[2] in car.values():
-            result.append(car)
-
-    return result
+    return [
+        car
+        for car in cars
+        if answers[0] in car.values()
+        and answers[1] in car.values()
+        and answers[2] in car.values()
+    ]
 
 
 def read_result(user_id: int):
@@ -72,8 +71,5 @@ def read_result(user_id: int):
                     break
 
         for car_id in result['cars']:
-            for car in cars:
-                if car_id == car['id']:
-                    user_result.append(car)
-
+            user_result.extend(car for car in cars if car_id == car['id'])
     return user_result
