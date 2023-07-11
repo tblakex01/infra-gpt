@@ -46,8 +46,7 @@ class Root(nn.Module):
 
     def forward(self, xs):
         x = torch.cat(xs, 1)
-        out = F.relu(self.bn(self.conv(x)))
-        return out
+        return F.relu(self.bn(self.conv(x)))
 
 
 class Tree(nn.Module):
@@ -57,7 +56,6 @@ class Tree(nn.Module):
         if level == 1:
             self.root = Root(2*out_channels, out_channels)
             self.left_node = block(in_channels, out_channels, stride=stride)
-            self.right_node = block(out_channels, out_channels, stride=1)
         else:
             self.root = Root((level+2)*out_channels, out_channels)
             for i in reversed(range(1, level)):
@@ -66,7 +64,8 @@ class Tree(nn.Module):
                 self.__setattr__('level_%d' % i, subtree)
             self.prev_root = block(in_channels, out_channels, stride=stride)
             self.left_node = block(out_channels, out_channels, stride=1)
-            self.right_node = block(out_channels, out_channels, stride=1)
+
+        self.right_node = block(out_channels, out_channels, stride=1)
 
     def forward(self, x):
         xs = [self.prev_root(x)] if self.level > 1 else []
@@ -78,8 +77,7 @@ class Tree(nn.Module):
         xs.append(x)
         x = self.right_node(x)
         xs.append(x)
-        out = self.root(xs)
-        return out
+        return self.root(xs)
 
 
 class DLA(nn.Module):

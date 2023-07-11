@@ -49,10 +49,10 @@ def progress_bar(current, total, msg=None):
     cur_len = int(65*current/total)
     rest_len = 65 - cur_len - 1
     sys.stdout.write(' [')
-    for i in range(cur_len):
+    for _ in range(cur_len):
         sys.stdout.write('=')
     sys.stdout.write('>')
-    for i in range(rest_len):
+    for _ in range(rest_len):
         sys.stdout.write('.')
     sys.stdout.write(']')
 
@@ -62,15 +62,14 @@ def progress_bar(current, total, msg=None):
     tot_time = cur_time - progress_bar.end_time
     progress_bar.end_time = cur_time
 
-    L = []
-    L.append('  Step: %s' % format_time(step_time))
-    L.append(' | Tot: %s' % format_time(tot_time))
+    L = [f'  Step: {format_time(step_time)}']
+    L.append(f' | Tot: {format_time(tot_time)}')
     if msg:
-        L.append(' | ' + msg)
+        L.append(f' | {msg}')
 
     msg = ''.join(L)
     sys.stdout.write(msg)
-    for i in range(progress_bar.term_width - 65 - len(msg)):
+    for _ in range(progress_bar.term_width - 65 - len(msg)):
         sys.stdout.write(' ')
 
     # Return to the start of the line

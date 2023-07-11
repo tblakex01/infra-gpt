@@ -30,12 +30,10 @@ def read_user():
 
 @app.get("/question/{position}", status_code=200)
 def read_questions(position: int, response: Response):
-    question = api.read_questions(position)
-
-    if not question:
+    if question := api.read_questions(position):
+        return question
+    else:
         raise HTTPException(status_code=400, detail="Error")
-
-    return question
 
 
 @app.get("/alternatives/{question_id}")

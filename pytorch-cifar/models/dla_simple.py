@@ -51,8 +51,7 @@ class Root(nn.Module):
 
     def forward(self, xs):
         x = torch.cat(xs, 1)
-        out = F.relu(self.bn(self.conv(x)))
-        return out
+        return F.relu(self.bn(self.conv(x)))
 
 
 class Tree(nn.Module):
@@ -71,8 +70,7 @@ class Tree(nn.Module):
     def forward(self, x):
         out1 = self.left_tree(x)
         out2 = self.right_tree(out1)
-        out = self.root([out1, out2])
-        return out
+        return self.root([out1, out2])
 
 
 class SimpleDLA(nn.Module):

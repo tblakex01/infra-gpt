@@ -101,8 +101,16 @@ def train(epoch):
     for batch_idx, (inputs, targets) in enumerate(trainloader):
         
         # Simulate memory bottleneck
-        large_tensor = np.array([[[[1.0 for i in range(5000)] for j in range(10000)] for k in range(3)] for l in range(4)])
-        
+        large_tensor = np.array(
+            [
+                [
+                    [[1.0 for _ in range(5000)] for _ in range(10000)]
+                    for _ in range(3)
+                ]
+                for _ in range(4)
+            ]
+        )
+
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
         outputs = net(inputs)
